@@ -123,9 +123,11 @@ const bool GeneratorCutsSelection::includes(const PhaseSpace& measuredPS, const 
   const FourMomentum& ml2 = measuredPS.ap();
   const FourMomentum& ml3 = measuredPS.pa();
   const FourMomentum& ml4 = measuredPS.pp();
-
   ConstValue<FourMomentum> llll(ml1 + ml2 + ml3 + ml4);
-  require(llll().m() > 100.);
+  //isMassCut
+    
+//require(llll().m() > 100.);
+    
 
 #elif defined PROCMACRO_ZAZ_2l2v
   const ConstValue<FourMomentum>& l1 = truePS.aa;
@@ -141,13 +143,7 @@ const bool GeneratorCutsSelection::includes(const PhaseSpace& measuredPS, const 
   ConstValue<FourMomentum> ll(l1() + l2());
   require(ll().m() > 40.);
 
-  //ConstValue<FourMomentum> nn(n1() + n2());
-  //require(ll().m() > 5.);
 
-  //require(truePS.p().m() > 60.);
-
-    //ConstValue<FourMomentum> llll(l1() + l2() + n1() + n2());
-    //require(llll().m() > 170.); 
 
 #endif    
   // MARKER END GeneratorCutsSelection
