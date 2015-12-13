@@ -99,8 +99,8 @@ const bool GeneratorCutsSelection::includes(const PhaseSpace& measuredPS, const 
   require(Mapping::minInvMassPhotonPropCutsPassed(truePS));
   assert(3.9999 < minInvMassPhotonProp && minInvMassPhotonProp < 4.0001);
 #if defined PROCMACRO_WW2l2v || defined PROCMACRO_WWZAZ_2l2v
-  const FourMomentum& l1 = truePS.aa();
-  const FourMomentum& l2 = truePS.pp();
+  const FourMomentum& l1 = measuredPS.aa();
+  const FourMomentum& l2 = measuredPS.pp();
   require(min(l1.pt(), l2.pt()) > 3.);
   require(max(fabs(l1.eta()), fabs(l2.eta())) < 2.6);
 #elif defined PROCMACRO_ZAZA2l2l || defined PROCMACRO_ZAZA4l
@@ -108,8 +108,25 @@ const bool GeneratorCutsSelection::includes(const PhaseSpace& measuredPS, const 
   const FourMomentum& l2 = truePS.ap();
   const FourMomentum& l3 = truePS.pa();
   const FourMomentum& l4 = truePS.pp();
-  require(min(l1.pt(), l2.pt(), l3.pt(), l4.pt()) > 3.);
-  require(max(fabs(l1.eta()), fabs(l2.eta()), fabs(l3.eta()), fabs(l4.eta())) < 2.6);
+    require(max(l1.pt(), l2.pt(), l3.pt(), l4.pt()) > 20.);
+    require(min(l1.pt(), l2.pt(), l3.pt(), l4.pt()) > 5.);
+    require(NextToLeading(l1.pt(), l2.pt(), l3.pt(), l4.pt()) > 10. );
+  require(max(fabs(l1.eta()), fabs(l2.eta())) < 2.5);
+  require(max(fabs(l3.eta()), fabs(l4.eta())) < 2.4);
+
+  ConstValue<FourMomentum> ll1(l1 + l2);
+  require(ll1().m() > 4.);
+  ConstValue<FourMomentum> ll2(l3 + l4);
+  require(ll2().m() > 4.);
+
+  const FourMomentum& ml1 = measuredPS.aa();
+  const FourMomentum& ml2 = measuredPS.ap();
+  const FourMomentum& ml3 = measuredPS.pa();
+  const FourMomentum& ml4 = measuredPS.pp();
+
+  ConstValue<FourMomentum> llll(ml1 + ml2 + ml3 + ml4);
+  require(llll().m() > 100.);
+
 #elif defined PROCMACRO_ZAZ_2l2v
   const ConstValue<FourMomentum>& l1 = truePS.aa;
   const ConstValue<FourMomentum>& l2 = truePS.ap;
@@ -140,6 +157,17 @@ const bool GeneratorCutsSelection::includes(const PhaseSpace& measuredPS, const 
 GeneratorCutsSelection::GeneratorCutsSelection()
   : Selection()
 {}
+
+const float GeneratorCutsSelection::NextToLeading(const float pt1, const float pt2, const float pt3, const float pt4) const
+{
+    if (pt1 == max(pt1,pt2,pt3,pt4))
+        return max(pt2,pt3,pt4);
+    else if (pt2 == max(pt1,pt2,pt3,pt4))
+        return max(pt1,pt3,pt4);
+    else if (pt3 == max(pt1,pt2,pt3,pt4))
+        return max(pt1,pt2,pt4);
+    else return max(pt1,pt2,pt3);
+}
 
 void GeneratorCutsSelection::writeSelectionCode(ostream& os) const
 {

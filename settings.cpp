@@ -22,10 +22,9 @@ const string settingsDescription = "LHC Higgs Cross Section WG, arXiv:1101.0593 
 // MC INTEGRATION MODE =====================================================
 
 int maxNumberOfGridAdaptationIterations = 5;     // zero: skip grid adaptation
-const Int64 gridAdaptationNumberOfShots = 50000; // before 50000
-const Int64 mainRunNumberOfShots = 100000;       // zero: skip main run (before was 100000)
+const Int64 gridAdaptationNumberOfShots = 10000; // before 50000
+const Int64 mainRunNumberOfShots = 100000;       // zero: skip main run (before was 100000long int seedForRandomNumberGenerator = 1;
 long int seedForRandomNumberGenerator = 1;
-
 // EVENT GENERATION MODE ===================================================
 
 const bool generateEvents = false;
@@ -121,8 +120,9 @@ vector<Scales*> scales_ptr_vector;
 namespace {
 RootshatScales central_scale_1(0.5);
 RootshatScales central_scale_2(1.);
-FixedScales central_scale_3(SMP::mH/2.);
-FixedScales central_scale_4(SMP::mV);
+RootshatScales central_scale_3(0.25);
+FixedScales central_scale_4(SMP::mH/2.);
+FixedScales central_scale_5(SMP::mV);
 }     // unnamed namespace
 
 void initialize_scales()
@@ -131,6 +131,7 @@ void initialize_scales()
   scales_ptr_vector.push_back(&central_scale_2);
   scales_ptr_vector.push_back(&central_scale_3);
   scales_ptr_vector.push_back(&central_scale_4);
+  scales_ptr_vector.push_back(&central_scale_5);
 }
 
 const int scale_variation_factor = 2;
@@ -156,9 +157,9 @@ ConstValue<double> PhaseSpace::E_CMS = 13.e3;     // GeV
 //const double alpha_s = 05;
 // select PDF set:
 //const string lhapdf_file = "MSTW2008lo68cl.LHgrid";
-const string lhapdf_file = "CT14llo.LHgrid";
+//const string lhapdf_file = "CT14llo.LHgrid";
 //const string lhapdf_file = "CT14lo.LHgrid";
-//const string lhapdf_file = "PDF4LHC15_nlo_mc.LHgrid";
+const string lhapdf_file = "PDF4LHC15_nlo_mc.LHgrid";
 //const string lhapdf_file = "PDF4LHC15_nnlo_mc.LHgrid";
 //const string lhapdf_file = "cteq6ll.LHpdf";
 //const string lhapdf_file = "MSTW2008nnlo68cl.LHgrid";
